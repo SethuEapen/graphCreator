@@ -1,15 +1,17 @@
-#include <iostream>;
+#include <iostream>
+#include <cstring>
+using namespace std;
 
 class Graph {
-	private:
+	public:
 		struct Vertex {
 			char label;
-		}
+		};
 		int matrix[20][20];
 		Graph();
-		Vertex vertisies[20];
+		Vertex* vertisies[20];
 		void printMatrix();
-		void addEdge(Vertex*, Vertex*, bool);
-		Vertex* findVertex();
-	private:
-}
+		void addEdge(Vertex, Vertex, bool);
+		Vertex findVertex(char);
+	private:	
+};
