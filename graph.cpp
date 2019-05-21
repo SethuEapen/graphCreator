@@ -8,14 +8,15 @@ using namespace std;
 struct Vertex {
 	char label;
 };
-int matrix[20][20];
-Vertex* vertisies[20];
-int numVert = 0;
-//void printMatrix();
-void addEdge(Vertex*, Vertex*, bool);
-Vertex* findVertex(char);
+
 
 int main(){
+	int matrix[20][20];
+	Vertex* vertisies[20];
+	int numVert = 0;
+	//void printMatrix();
+	void addEdge(Vertex*, Vertex*, bool);
+	Vertex* findVertex(char, Vertex**);
 	char input[50];//cstring for input
 	bool running = true;//is the program still running
 	while (running){//as long as it is still running
@@ -24,8 +25,12 @@ int main(){
 		cin.clear();
 		cin.ignore(10000, '\n');
 		if (strcmp(input, "input") == 0){
+			cout << "Name of vector: ";
 			Vertex* v = new Vertex();
-			v->label = char(65+numVert);
+			cin.get(input, 50);//get users input
+			cin.clear();
+			cin.ignore(10000, '\n');
+			v->label = input[0];
 			cout << "You just inputed " << v->label << endl;
 			vertisies[numVert] = v;
 			numVert++;
@@ -85,7 +90,7 @@ int main(){
 	}
 }
 
-Vertex* findVertex(char v){
+Vertex* findVertex(char v, Vertex** vertisies){
 	for(int i = 0; i < 20; i++){
 		if(v == vertisies[i]->label){
 			return vertisies[i];
