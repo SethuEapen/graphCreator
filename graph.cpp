@@ -20,8 +20,10 @@ int main(){
 	void addEdge(Vertex*, Vertex*, bool);
 	Vertex* findVertex(char, Vertex**);
 	int vertexIndex(char, Vertex**);
+	void clear(int[20][20]);
 	char input[50];//cstring for input
 	bool running = true;//is the program still running
+	clear(matrix);
 	while (running){//as long as it is still running
 		cout << "Do you want to \"input\", \"print\", \"search\", \"delete\", or \"quit\"" << endl;//\"remove\",
 		cin.get(input, 50);//get users input
@@ -94,16 +96,42 @@ int main(){
 			if(temp != NULL){
 				for(int y = 0; numVert > y; y++){
 					matrix[temp][y] = NULL;
-				}
-				for(int x = 0; numVert > x; x++){
-					matrix[x][temp] = NULL;
+					matrix[y][temp] = NULL;
 				}
 				vertisies[temp] = NULL;
 			}
 			for(int x = temp + 1; numVert > x; x++){
-
+				vertisies[x-1] = vertisies[x];
 			}
 			numVert--;
+		}
+		else if (strcmp(input, "remove") == 0){//if input is eaqual to quit 
+			char first[50];
+			char second[50];
+			char bi[50];
+			cout << "First vertex: ";
+			cin.get(first, 50);//get users input
+			cin.clear();
+			cin.ignore(10000, '\n'); 
+			cout << "Second vertex: ";
+			cin.get(second, 50);//get users input
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout << "Bidirectional (y or n): ";
+			cin.get(bi, 50);//get users input
+			cin.clear();
+			cin.ignore(10000, '\n');
+			int y = vertexIndex(first[0], vertisies);
+			int x = vertexIndex(second[0], vertisies);
+			if(x != NULL || y != NULL){
+				matrix[x][y] = NULL;
+				if(bi[0] == 'y'){
+					matrix[y][x] = NULL;
+				}
+			}
+		}
+		else if (strcmp(input, "path") == 0){//if input is eaqual to quit 
+
 		}
 		else if (strcmp(input, "quit") == 0){//if input is eaqual to quit 
 			running = false;//set running to false
@@ -127,5 +155,13 @@ Vertex* findVertex(char v, Vertex** vertisies){
 		}
 	}	
 	return NULL;
+}
+
+void clear(int matrix[20][20]){
+	for(int x = 0; 20 > x; x++){
+		for(int y = 0; 20 > y; y++){
+			matrix[x][y] = NULL;
+		}
+	}
 }
 
