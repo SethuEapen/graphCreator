@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#include <vector>
+#include <utility>      // std::pair, std::make_pair
+
 
 
 //#include "graph.h"
@@ -11,16 +14,20 @@ struct Vertex {
 	char label;
 };
 
+bool notThere(char, char[50]);
+void addEdge(Vertex*, Vertex*, bool);
+Vertex* findVertex(char, Vertex**);
+int vertexIndex(char, Vertex**);
+void clear(int[20][20]);
+void findPaths(Vertex*, Vertex*, pair<char[50], int>, vector<pair<char[50], int> >, int[20][20], Vertex**);
+
 
 int main(){
 	int matrix[20][20];
 	Vertex* vertisies[20];
+	vector<pair<char[50], int> > paths;
 	int numVert = 0;
 	//void printMatrix();
-	void addEdge(Vertex*, Vertex*, bool);
-	Vertex* findVertex(char, Vertex**);
-	int vertexIndex(char, Vertex**);
-	void clear(int[20][20]);
 	char input[50];//cstring for input
 	bool running = true;//is the program still running
 	clear(matrix);
@@ -30,7 +37,7 @@ int main(){
 		cin.clear();
 		cin.ignore(10000, '\n');
 		if (strcmp(input, "input") == 0){
-			cout << "Name of vector: ";
+			cout << "Name of vertex: ";
 			Vertex* v = new Vertex();
 			cin.get(input, 50);//get users input
 			cin.clear();
@@ -131,7 +138,22 @@ int main(){
 			}
 		}
 		else if (strcmp(input, "path") == 0){//if input is eaqual to quit 
-
+			char first[50];
+			char second[50];
+			cout << "First vertex: ";
+			cin.get(first, 50);//get users input
+			cin.clear();
+			cin.ignore(10000, '\n'); 
+			cout << "Second vertex: ";
+			cin.get(second, 50);//get users input
+			cin.clear();
+			cin.ignore(10000, '\n');
+			int start = vertexIndex(first[0], vertisies);
+			int end = vertexIndex(second[0], vertisies);
+			pair <char[50],int> path;
+			path.first[0] = vertisies[start]->label;
+			path.second = 0;
+			findPaths(vertisies[start], vertisies[end], path, paths, matrix, vertisies);
 		}
 		else if (strcmp(input, "quit") == 0){//if input is eaqual to quit 
 			running = false;//set running to false
@@ -156,6 +178,36 @@ Vertex* findVertex(char v, Vertex** vertisies){
 	}	
 	return NULL;
 }
+
+void findPaths(Vertex* start, Vertex* end, pair<char[50], int> path, vector<pair<char[50], int> > paths, int matrix[20][20], Vertex** vertisies){
+	int x = vertexIndex(start->label, vertisies);
+	bool anyConnections = false;
+	for(int i = 0; i < 20; i++){
+		if(matrix[x][i] != NULL){
+			if(notThere(matrix[20][20], path.first)){
+				strcat(path.first, vertisies[i]->label + "");
+				path.second += matrix[x][i];
+				if(vertisies[i] != end){
+					findPaths(vertisies[i], end, path, paths, matrix, vertisies);
+					anyConnections = true;
+				}
+				else{
+					paths.push_back(path);
+				}
+			}
+		}
+	}
+}
+
+bool notThere(char path, char paths[50]){
+	for(int i = 0; i < 50; i++){
+		if(path == paths[i]){
+			return false;
+		}
+	}
+	return true;
+}
+
 
 void clear(int matrix[20][20]){
 	for(int x = 0; 20 > x; x++){
